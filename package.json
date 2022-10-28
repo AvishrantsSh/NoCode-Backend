@@ -1,0 +1,20 @@
+{
+  "name": "nocode",
+  "version": "1.0.0",
+  "description": "No Code backend",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "keywords": [
+    "nocode"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "mongoose": "^6.7.0",
+    "nodemon": "^2.0.20"
+  }
+}
