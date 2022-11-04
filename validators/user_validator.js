@@ -1,7 +1,11 @@
-const check = require('express-validator').check;
+const check = require("express-validator").check;
 
 const name = check("name", "Name is required").not().isEmpty();
-const email = check("email", "Please provide a valid email address").isEmail();
+const email = check("email", "Please provide a valid email address")
+  .isEmail()
+  .trim()
+  .escape()
+  .normalizeEmail();
 const password = check(
   "password",
   "Password is required of minimum length of 6."

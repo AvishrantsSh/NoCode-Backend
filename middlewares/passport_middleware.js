@@ -1,11 +1,11 @@
-const passport = require('passport');
-const User = require('../models/user');
-const JwtStrategy = require('passport-jwt').Strategy;
-const ExtractJwt = require('passport-jwt').ExtractJwt;
+const passport = require("passport");
+const User = require("../models/user");
+const JwtStrategy = require("passport-jwt").Strategy;
+const ExtractJwt = require("passport-jwt").ExtractJwt;
 
 const jwtOptions = {
-    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-    secretOrKey: process.env.JWT_SECRET
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  secretOrKey: process.env.JWT_SECRET,
 };
 
 passport.use(
@@ -28,11 +28,11 @@ const userAuth = (req, res, next) => {
       return res.status(401).json(err);
     }
     if (!user) {
-      return res.status(401).json(info);
+      return res.status(401).json({ error: info.message });
     }
-
+    req.user = user;
     next();
   })(req, res);
-}
+};
 
 module.exports.userAuth = userAuth;

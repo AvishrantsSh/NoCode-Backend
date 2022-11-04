@@ -1,15 +1,15 @@
 const mongoose = require("mongoose");
 
 const DataSchema = new mongoose.Schema({
-    schemaID: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "JsonModel",
-        required: true,
-    },
-    data: {
-        type: Object,
-        required: true,
-    },
+  schemaID: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "JsonModel",
+    required: true,
+  },
+  data: {
+    type: Object,
+    required: true,
+  },
 });
 
 // Create Indexes
