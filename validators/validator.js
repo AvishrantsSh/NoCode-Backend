@@ -1,8 +1,10 @@
 const userValidator = require("./user_validator");
 const projectValidator = require("./project_validator");
+const schemaValidator = require("./schema_validator");
 module.exports = {
   userValidator,
   projectValidator,
+  schemaValidator,
 };
 
 module.exports.idValidator = (value) => {
