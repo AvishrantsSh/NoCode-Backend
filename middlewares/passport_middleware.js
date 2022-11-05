@@ -9,9 +9,9 @@ const jwtOptions = {
 };
 
 passport.use(
-  new JwtStrategy(jwtOptions, async ({ id }, done) => {
+  new JwtStrategy(jwtOptions, async ({ _id }, done) => {
     try {
-      let user = await User.findById(id);
+      let user = await User.findById(_id);
       if (!user) {
         throw new Error("User not found");
       }

@@ -27,6 +27,15 @@ ProjectSchema.pre("save", async function (next) {
   next();
 });
 
+ProjectSchema.pre("remove", async function (next) {
+  try {
+    await this.model("JSONSchema").deleteMany({ project_id: this._id });
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
+
 ProjectSchema.methods.validateToken = async function (token) {
   return await bcrypt.compare(password, this.password);
 };

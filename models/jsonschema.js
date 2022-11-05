@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const JsonSchema = new mongoose.Schema({
+const JSONSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -16,7 +16,16 @@ const JsonSchema = new mongoose.Schema({
   },
 });
 
-// Create Indexes
-JsonSchema.index({ project_id: 1, name: 1 }, { unique: true });
+JSONSchema.pre("remove", async function (next) {
+  try {
+    await this.model("DataModel").deleteMany({ project_id: this._id });
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
 
-module.exports = mongoose.model("JsonModel", JsonSchema);
+// Create Indexes
+JSONSchema.index({ project_id: 1, name: 1 }, { unique: true });
+
+module.exports = mongoose.model("JSONSchema", JSONSchema);

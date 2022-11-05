@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const DataSchema = new mongoose.Schema({
   schemaID: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "JsonModel",
+    ref: "JSONSchema",
     required: true,
   },
   data: {
