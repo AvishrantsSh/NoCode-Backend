@@ -32,10 +32,24 @@ module.exports.update = async function (req, res) {
 
 module.exports.get = async function (req, res) {
   try {
-    if (req.params.id) {
-      const data = await DataModel.findById(req.params.id);
+    if (req.params.dataID) {
+      if (!validators.idValidator(req.params.dataID)) {
+        return res.status(400).json({
+          message: "Invalid data ID",
+        });
+      }
+      const data = await DataModel.find({
+        _id: req.params.dataID,
+        schemaID: req.params.schemaID,
+      });
     } else {
-      const data = await DataModel.find();
+      const data = await DataModel.find({ schemaID: req.params.schemaID });
+    }
+
+    if (!data) {
+      return res.status(404).json({
+        message: "Requested data not found",
+      });
     }
 
     return res.status(200).json({

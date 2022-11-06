@@ -29,7 +29,7 @@ ProjectSchema.pre("save", async function (next) {
 
 ProjectSchema.pre("remove", async function (next) {
   try {
-    await this.model("JSONSchema").deleteMany({ project_id: this._id });
+    await this.model("JSONSchema").deleteMany({ projectID: this._id });
     next();
   } catch (err) {
     next(err);
@@ -37,7 +37,7 @@ ProjectSchema.pre("remove", async function (next) {
 });
 
 ProjectSchema.methods.validateToken = async function (token) {
-  return await bcrypt.compare(password, this.password);
+  return await bcrypt.compare(token, this.access_token);
 };
 
 // Create Indexes

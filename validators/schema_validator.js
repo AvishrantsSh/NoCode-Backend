@@ -9,7 +9,7 @@ const name = check("name", "Name is required")
   .custom((value, { req }) => {
     return JSONSchema.findOne({
       name: value,
-      project_id: req.body.project_id,
+      projectID: req.body.projectID,
     }).then((jsonschema) => {
       if (jsonschema) {
         return Promise.reject("Name already in use");
@@ -17,7 +17,7 @@ const name = check("name", "Name is required")
     });
   });
 
-const project_id = check("project_id", "Project ID is required")
+const projectID = check("projectID", "Project ID is required")
   .not()
   .isEmpty()
   .custom((value, { req }) => {
@@ -42,4 +42,4 @@ const jsonschema = check("jsonschema", "JSON Schema is required")
     return true;
   });
 
-module.exports.SchemaCreateValidator = [name, project_id, jsonschema];
+module.exports.SchemaCreateValidator = [name, jsonschema];

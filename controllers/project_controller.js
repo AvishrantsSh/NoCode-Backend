@@ -43,9 +43,9 @@ module.exports.listAll = async function (req, res) {
 
 module.exports.details = async function (req, res) {
   try {
-    if (validators.idValidator(req.params.project_id)) {
+    if (validators.idValidator(req.params.projectID)) {
       const project = await Project.findOne({
-        _id: req.params.project_id,
+        _id: req.params.projectID,
         created_by: req.user._id,
       }).select("name created_at");
 
@@ -71,9 +71,9 @@ module.exports.details = async function (req, res) {
 
 module.exports.delete = async function (req, res) {
   try {
-    if (validators.idValidator(req.params.project_id)) {
+    if (validators.idValidator(req.params.projectID)) {
       const project = await Project.findOne({
-        _id: req.params.project_id,
+        _id: req.params.projectID,
         created_by: req.user._id,
       });
 
@@ -100,9 +100,9 @@ module.exports.delete = async function (req, res) {
 
 module.exports.generateNewAccessToken = async function (req, res) {
   try {
-    if (validators.idValidator(req.params.project_id)) {
+    if (validators.idValidator(req.params.projectID)) {
       const project = await Project.findOne({
-        _id: req.params.project_id,
+        _id: req.params.projectID,
         created_by: req.user._id,
       });
 

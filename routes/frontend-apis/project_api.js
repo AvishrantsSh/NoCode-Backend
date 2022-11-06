@@ -8,7 +8,7 @@ const projectController = require("../../controllers/project_controller");
 
 // Project Routes
 router.get("/", projectController.listAll);
-router.get("/:project_id", projectController.details);
+router.get("/:projectID", projectController.details);
 
 router.post(
   "/",
@@ -17,10 +17,10 @@ router.post(
   projectController.create
 );
 router.post(
-  "/:project_id/generateToken",
+  "/:projectID/generateToken",
   projectController.generateNewAccessToken
 );
 
-router.delete("/:project_id", projectController.delete);
+router.delete("/:projectID", projectController.delete);
 
 module.exports = router;

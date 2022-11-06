@@ -5,7 +5,7 @@ const JSONSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  project_id: {
+  projectID: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Project",
     required: true,
@@ -18,7 +18,7 @@ const JSONSchema = new mongoose.Schema({
 
 JSONSchema.pre("remove", async function (next) {
   try {
-    await this.model("DataModel").deleteMany({ project_id: this._id });
+    await this.model("DataModel").deleteMany({ projectID: this._id });
     next();
   } catch (err) {
     next(err);
@@ -26,6 +26,16 @@ JSONSchema.pre("remove", async function (next) {
 });
 
 // Create Indexes
-JSONSchema.index({ project_id: 1, name: 1 }, { unique: true });
+JSONSchema.index({ projectID: 1, name: 1 }, { unique: true });
+
+// Custom Methods
+JSONSchema.methods.getJSONSchema = function () {
+  return {
+    _id: this._id,
+    name: this.name,
+    projectID: this.projectID._id,
+    jsonschema: this.jsonschema,
+  };
+};
 
 module.exports = mongoose.model("JSONSchema", JSONSchema);
