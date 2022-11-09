@@ -32,18 +32,19 @@ module.exports.update = async function (req, res) {
 
 module.exports.get = async function (req, res) {
   try {
+    let data = null;
     if (req.params.dataID) {
       if (!validators.idValidator(req.params.dataID)) {
         return res.status(400).json({
           message: "Invalid data ID",
         });
       }
-      const data = await DataModel.find({
+      data = await DataModel.find({
         _id: req.params.dataID,
         schemaID: req.params.schemaID,
       });
     } else {
-      const data = await DataModel.find({ schemaID: req.params.schemaID });
+      data = await DataModel.find({ schemaID: req.params.schemaID });
     }
 
     if (!data) {

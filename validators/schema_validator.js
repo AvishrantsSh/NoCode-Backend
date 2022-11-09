@@ -42,4 +42,4 @@ const jsonschema = check("jsonschema", "JSON Schema is required")
     return true;
   });
 
-module.exports.SchemaCreateValidator = [name, jsonschema];
+module.exports.SchemaCreateValidator = [name, projectID, jsonschema];
