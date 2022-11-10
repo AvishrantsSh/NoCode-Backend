@@ -10,4 +10,22 @@ router.get(
   dataController.get
 );
 
+router.post(
+  "/:projectID/:schemaID",
+  APIMiddleware.apiAuth,
+  dataController.create
+);
+
+router.put(
+  "/:projectID/:schemaID/:dataID",
+  APIMiddleware.apiAuth,
+  dataController.update
+);
+
+router.delete(
+  "/:projectID/:schemaID/:dataID",
+  APIMiddleware.apiAuth,
+  dataController.delete
+);
+
 module.exports = router;

@@ -25,6 +25,15 @@ JSONSchema.pre("remove", async function (next) {
   }
 });
 
+JSONSchema.pre("remove", async function (next) {
+  try {
+    await this.model("DataModel").deleteMany({ schemaID: this._id });
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
+
 // Create Indexes
 JSONSchema.index({ projectID: 1, name: 1 }, { unique: true });
 

@@ -2,6 +2,7 @@ const check = require("express-validator").check;
 const AJV = require("ajv/dist/2019");
 const JSONSchema = require("../models/jsonschema");
 const Project = require("../models/project");
+const draft7MetaSchema = require("ajv/dist/refs/json-schema-draft-07.json");
 
 const name = check("name", "Name is required")
   .not()
@@ -35,10 +36,8 @@ const jsonschema = check("jsonschema", "JSON Schema is required")
   .isEmpty()
   .custom((value) => {
     const ajv = new AJV();
-    const valid = ajv.validateSchema(value);
-    if (!valid) {
-      throw new Error("Invalid JSON Schema");
-    }
+    ajv.addMetaSchema(draft7MetaSchema);
+    ajv.compile(value);
     return true;
   });
 

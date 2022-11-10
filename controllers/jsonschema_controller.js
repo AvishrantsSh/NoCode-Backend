@@ -1,5 +1,4 @@
 const validators = require("../validators/validator"),
-  Project = require("../models/project"),
   JsonSchema = require("../models/jsonschema");
 
 module.exports.create = async function (req, res) {
@@ -40,7 +39,7 @@ module.exports.listAll = async function (req, res) {
       });
 
       return res.status(200).json({
-        data: jsonschemas.map((jsonschema) => jsonschema.getJSONSchema()),
+        schemas: jsonschemas.map((jsonschema) => jsonschema.getJSONSchema()),
       });
     } else {
       return res.status(400).json({
