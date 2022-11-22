@@ -7,8 +7,12 @@ const router = express.Router();
 const jsonschemaController = require("../../controllers/jsonschema_controller");
 
 // JSONSchema Routes
-router.get("/:projectID", jsonschemaController.listAll);
-router.get("/:projectID/:schemaID", jsonschemaController.details);
+router.get("/:projectID", ValidatorMiddleware, jsonschemaController.listAll);
+router.get(
+  "/:projectID/:schemaID",
+  ValidatorMiddleware,
+  jsonschemaController.details
+);
 
 router.post(
   "/:projectID",
@@ -17,6 +21,10 @@ router.post(
   jsonschemaController.create
 );
 
-router.delete("/:projectID/:schemaID", jsonschemaController.delete);
+router.delete(
+  "/:projectID/:schemaID",
+  ValidatorMiddleware,
+  jsonschemaController.delete
+);
 
 module.exports = router;

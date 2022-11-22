@@ -1,34 +1,20 @@
 const DataModel = require("../models/data");
-const validators = require("../validators/validator");
 
 module.exports.get = async function (req, res) {
-  try {
-    let data = null;
-    if (req.params.dataID) {
-      if (!validators.idValidator(req.params.dataID)) {
-        return res.status(400).json({
-          message: "Invalid data ID",
-        });
-      }
-      data = await DataModel.findOne({
-        _id: req.params.dataID,
-        schemaID: req.params.schemaID,
-      });
-
-      if (data) return res.status(200).json(data.getData());
-    } else {
-      data = await DataModel.find({ schemaID: req.params.schemaID });
-      if (data) return res.status(200).json(data.map((data) => data.getData()));
-    }
-
-    return res.status(404).json({
-      message: "Requested data not found",
+  let data = null;
+  if (req.params.dataID) {
+    data = await DataModel.find({
+      _id: req.params.dataID,
+      schemaID: req.params.schemaID,
     });
-  } catch (err) {
-    return res.status(500).json({
-      message: err.message,
-    });
+  } else {
+    data = await DataModel.find({ schemaID: req.schema._id });
   }
+
+  if (data) return res.status(200).json(data.map((data) => data.getData()));
+  return res.status(404).json({
+    message: "Requested data not found",
+  });
 };
 
 module.exports.create = async function (req, res) {
@@ -47,11 +33,6 @@ module.exports.create = async function (req, res) {
 
 module.exports.update = async function (req, res) {
   try {
-    if (!validators.idValidator(req.params.dataID)) {
-      return res.status(400).json({
-        message: "Invalid data ID",
-      });
-    }
     const data = await DataModel.validateUpdate(
       req.params.schemaID,
       req.params.dataID,
