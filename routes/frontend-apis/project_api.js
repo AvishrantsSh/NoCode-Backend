@@ -9,6 +9,11 @@ const projectController = require("../../controllers/project_controller");
 // Project Routes
 router.get("/", ValidatorMiddleware, projectController.listAll);
 router.get("/:projectID", ValidatorMiddleware, projectController.details);
+router.get(
+  "/:projectID/generateToken",
+  ValidatorMiddleware,
+  projectController.generateNewAccessToken
+);
 
 router.post(
   "/",
@@ -16,12 +21,6 @@ router.post(
   ValidatorMiddleware,
   projectController.create
 );
-router.post(
-  "/:projectID/generateToken",
-  ValidatorMiddleware,
-  projectController.generateNewAccessToken
-);
-
 router.delete("/:projectID", ValidatorMiddleware, projectController.delete);
 
 module.exports = router;
