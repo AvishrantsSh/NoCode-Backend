@@ -40,6 +40,15 @@ ProjectSchema.methods.validateToken = async function (token) {
   return await bcrypt.compare(token, this.access_token);
 };
 
+ProjectSchema.methods.getProjectInfo = function () {
+  return {
+    _id: this._id,
+    name: this.name,
+    created_by: this.created_by,
+    created_at: this.created_at,
+  };
+};
+
 // Create Indexes
 ProjectSchema.index({ created_by: 1, name: 1 }, { unique: true });
 

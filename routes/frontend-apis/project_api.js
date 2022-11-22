@@ -7,8 +7,8 @@ const router = express.Router();
 const projectController = require("../../controllers/project_controller");
 
 // Project Routes
-router.get("/", projectController.listAll);
-router.get("/:projectID", projectController.details);
+router.get("/", ValidatorMiddleware, projectController.listAll);
+router.get("/:projectID", ValidatorMiddleware, projectController.details);
 
 router.post(
   "/",
@@ -18,9 +18,10 @@ router.post(
 );
 router.post(
   "/:projectID/generateToken",
+  ValidatorMiddleware,
   projectController.generateNewAccessToken
 );
 
-router.delete("/:projectID", projectController.delete);
+router.delete("/:projectID", ValidatorMiddleware, projectController.delete);
 
 module.exports = router;
