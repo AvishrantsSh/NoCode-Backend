@@ -21,7 +21,6 @@ const projectID = check("projectID", "Project ID is required")
 const jsonschema = check("jsonschema", "JSON Schema is required")
   .not()
   .isEmpty()
-  .isJSON()
   .custom((value) => {
     console.log(value, value === {});
     if (value === {}) {

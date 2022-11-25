@@ -14,11 +14,15 @@ const JSONSchema = new mongoose.Schema({
     type: Object,
     required: true,
   },
+  api_calls: {
+    type: Number,
+    default: 0,
+  },
 });
 
 JSONSchema.pre("remove", async function (next) {
   try {
-    await this.model("DataModel").deleteMany({ projectID: this._id });
+    await this.model("DataModel").deleteMany({ schemaID: this._id });
     next();
   } catch (err) {
     next(err);
@@ -50,7 +54,21 @@ JSONSchema.methods.getJSONSchema = function () {
     _id: this._id,
     name: this.name,
     projectID: this.projectID._id,
+  };
+};
+
+JSONSchema.methods.getAllDetails = async function () {
+  const records = await this.model("DataModel")
+    .find({ schemaID: this._id })
+    .count();
+
+  return {
+    _id: this._id,
+    name: this.name,
+    projectID: this.projectID,
     jsonschema: this.jsonschema,
+    recordCount: records,
+    requestCount: this.api_calls,
   };
 };
 

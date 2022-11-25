@@ -6,7 +6,7 @@ const JSONSchema = require("../models/jsonschema");
 const validationMiddleware = async (req, res, next) => {
   let errors = validator.validationResult(req);
   if (!errors.isEmpty()) {
-    return res.json({
+    return res.status(400).json({
       errors: errors.array(),
     });
   }
