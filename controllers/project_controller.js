@@ -12,9 +12,7 @@ module.exports.listAll = async function (req, res) {
 
 module.exports.details = async function (req, res) {
   if (req.project.created_by.equals(req.user._id)) {
-    return res.status(200).json({
-      data: req.project.getProjectInfo(),
-    });
+    return res.status(200).json(await req.project.getAllDetails());
   }
   return res.status(403).json({
     error: "You are not authorized to access this project",

@@ -44,8 +44,37 @@ ProjectSchema.methods.getProjectInfo = function () {
   return {
     _id: this._id,
     name: this.name,
+    created_at: this.created_at,
+  };
+};
+
+ProjectSchema.methods.getAllDetails = async function () {
+  const schemaCount = await this.model("JSONSchema")
+    .find({ projectID: this._id })
+    .count();
+  let requestCount = await this.model("JSONSchema").aggregate([
+    {
+      $match: {
+        projectID: this._id,
+      },
+    },
+    {
+      $group: {
+        _id: null,
+        total: { $sum: "$api_calls" },
+      },
+    },
+  ]);
+
+  requestCount = requestCount.length > 0 ? requestCount[0].total : 0;
+
+  return {
+    _id: this._id,
+    name: this.name,
     created_by: this.created_by,
     created_at: this.created_at,
+    schemaCount: schemaCount,
+    requestCount: requestCount,
   };
 };
 

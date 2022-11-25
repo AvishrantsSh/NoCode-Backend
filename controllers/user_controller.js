@@ -35,14 +35,12 @@ module.exports.login = async function (req, res) {
     let user = await User.findOne({ email });
     if (!user) {
       return res.status(404).json({
-        success: false,
-        message: "User does not exist. Please register first.",
+        error: "User does not exist",
       });
     }
     if (!(await user.checkPassword(password))) {
       return res.status(401).json({
-        success: false,
-        message: "Incorrect password",
+        error: "Incorrect credentials",
       });
     }
     let token = await user.getToken();
@@ -53,8 +51,7 @@ module.exports.login = async function (req, res) {
     });
   } catch (err) {
     return res.status(500).json({
-      success: false,
-      message: "Something went wrong",
+      error: "Something went wrong",
     });
   }
 };
