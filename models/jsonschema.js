@@ -1,4 +1,7 @@
 const mongoose = require("mongoose");
+const AJV = require("ajv/dist/2019");
+const draft7MetaSchema = require("ajv/dist/refs/json-schema-draft-07.json");
+const addFormats = require("ajv-formats");
 
 const JSONSchema = new mongoose.Schema({
   name: {
@@ -67,9 +70,51 @@ JSONSchema.methods.getAllDetails = async function () {
     name: this.name,
     projectID: this.projectID,
     jsonschema: this.jsonschema,
+    fields: Object.keys(this.jsonschema.properties),
     recordCount: records,
     requestCount: this.api_calls,
   };
+};
+
+JSONSchema.methods.validateCreate = async function (data) {
+  const ajv = new AJV();
+  ajv.addMetaSchema(draft7MetaSchema);
+  addFormats(ajv);
+
+  const valid = ajv.validate(this.jsonschema, data);
+  if (!valid) {
+    throw new Error(ajv.errorsText());
+  }
+
+  // Save validated data
+  const dataObj = await this.model("DataModel")({
+    schemaID: this._id,
+    data: data,
+  });
+  return dataObj.save();
+};
+
+JSONSchema.methods.validateUpdate = async function (dataID, data) {
+  const ajv = new AJV();
+  ajv.addMetaSchema(draft7MetaSchema);
+  addFormats(ajv);
+
+  const valid = ajv.validate(this.jsonschema, data);
+  if (!valid) {
+    throw new Error(ajv.errorsText());
+  }
+
+  // Save validated data
+  return this.model("DataModel").findOneAndUpdate(
+    {
+      _id: dataID,
+      schemaID: this._id,
+    },
+    {
+      $set: { data: data },
+    },
+    { new: true }
+  );
 };
 
 module.exports = mongoose.model("JSONSchema", JSONSchema);

@@ -19,7 +19,7 @@ module.exports.get = async function (req, res) {
 
 module.exports.create = async function (req, res) {
   try {
-    const data = await DataModel.validateCreate(req.params.schemaID, req.body);
+    const data = await req.schema.validateCreate(req.body);
     return res.status(201).json({
       message: "Data created successfully",
       data: data.getData(),
@@ -33,15 +33,11 @@ module.exports.create = async function (req, res) {
 
 module.exports.update = async function (req, res) {
   try {
-    const data = await DataModel.validateUpdate(
-      req.params.schemaID,
-      req.params.dataID,
-      req.body
-    );
+    const data = await req.schema.validateUpdate(req.params.dataID, req.body);
 
     return res.status(200).json({
       message: "Data updated successfully",
-      data: data,
+      data: data.getData(),
     });
   } catch (err) {
     return res.status(500).json({
