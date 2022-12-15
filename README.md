@@ -1,93 +1,50 @@
-# AuthMiddleware
-A Django middleware to enforce user login before accessing certain views.
+# Encore - A JSON Schema based API Builder
 
-[![image](https://img.shields.io/pypi/v/django-authmiddleware.svg?style=for-the-badge)](https://pypi.org/project/django-authmiddleware/)
+A prototype implmenetation of JSON schema based No-Code REST API builder.
 
-[![image](https://img.shields.io/badge/code%20style-black-000000.svg?style=for-the-badge)](https://github.com/psf/black)
+![image](https://img.shields.io/github/license/AvishrantsSh/NoCode-Backend.svg?style=for-the-badge)
 
-Setup
-=====
-You can install django-authmiddleware from **pip** using
-```sh
-pip install django-authmiddleware
-```
+# Getting started
 
-and then add it to your middleware using:
+To get the Node server running locally:
 
-```{.sourceCode .python}
-MIDDLEWARE = [
-    ...
-    'AuthMiddleware.middleware.AuthRequiredMiddleware',
-    ...
-]
-```
-Make sure you add the trailing comma or you might get a
-`ImproperlyConfigured` Exception.
+- Clone this repo
+- `npm install` to install all required dependencies
+- (Optional) Install MongoDB Community Edition ([Instructions](https://docs.mongodb.com/manual/installation/#tutorials)) and run it by executing `mongod`
+- `npm run dev` to start the local server
+- Create a `.env` file in the root directory and add the following environment variables:
 
-Configuration
-=============
-Configure the middleware's behaviour in your Django project's settings. The middleware expects a `AUTH_SETTINGS` setting within Django settings to work properly. You must
-set the following keys within `AUTH_SETTINGS`:
+  ```{.sourceCode .bash}
+  PORT=3000
+  MONGO_URI=<--Mongo URL-->
+  JWT_SECRET=<--Your Secret-->
+  ```
 
--   `LOGIN_URL`
--   `DEFAULT_REDIRECT_URL`
--   `LOCK_URLS`
--   `REDIRECT_AFTER_LOGIN`
+# Code Overview
 
-`LOGIN_URL`
------------
-A URL name that is used for login in your django project. Defaults to `login`.
-```{.sourceCode .python}
-AUTH_SETTINGS = {
-    ...
-    "LOGIN_URL" : "example"
-    ...
-}
-```
+## Dependencies
 
-`DEFAULT_REDIRECT_URL`
-----------------------
-A URL name to which users are redirect if they try to access an invalid URLs. Defaults to `None`.
+- [ajv](https://github.com/ajv-validator/ajv) - For JSON Schema Validation
+- [expressjs](https://github.com/expressjs/express) - The server for handling and routing HTTP requests
+- [express-jwt](https://github.com/auth0/express-jwt) - Middleware for validating JWTs for authentication
+- [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken) - For generating JWTs used by authentication
+- [mongoose](https://github.com/Automattic/mongoose) - For modeling and mapping MongoDB data to javascript
+- [passport](https://github.com/jaredhanson/passport) - For handling user authentication
+- [swagger-ui-express](https://github.com/scottie1984/swagger-ui-express) - For API Documentation
 
+## Application Structure
 
-When set to `None`, no redirects take place and error is generated for invalid URLs.
-```{.sourceCode .python}
-AUTH_SETTINGS = {
-    ...
-    "DEFAULT_REDIRECT_URL" : "example"
-    ...
-}
-```
+- `server.js` - The entry point to our application. This file defines our express server and connects it to MongoDB using mongoose. It also requires the routes and models we'll be using in the application.
+- `controllers/` - This folder contains the controllers for our API. Controllers are further referenced in the routes.
+- `middlewares/` - This folder contains custom middlewares for authentication and field validations.
+- `models/` - This folder contains the schema definitions for our Mongoose models.
+- `routes/` - This folder contains the route definitions for our API.
 
-`LOCK_URLS`
-----------------------
-A set of URL names to which access is restricted. Access to these URLs is given only on successful login. Default to empty set `{}`.
-```{.sourceCode .python}
-AUTH_SETTINGS = {
-    ...
-    "LOCK_URLS" : {
-        "example-1",
-        "example-2",
-        "example-3",
-        ...
-        }
-    ...
-}
-```
+## Authentication
 
-`REDIRECT_AFTER_LOGIN`
-----------------------
-If set to `True`, user is redirected to original page after successful login. Adds `?next` parameter to URL request. Defaults to `True`.
-```{.sourceCode .python}
-AUTH_SETTINGS = {
-    ...
-    "REDIRECT_AFTER_LOGIN" : False,
-    ...
-}
-```
+Requests are authenticated using the `Authorization` header. We define two express middlewares in `middlewares/` that can be used to authenticate the requests. The `passport_middleware` middleware configures the `express-jwt` middleware using our application's secret and returns a 401 status code if the request cannot be authenticated. This method of authentication is useful for frontend integrations. The `api_middleware` middleware utilizes `access key`, unique to a project, to authorize requests.
 
-Contributing
-============
+# Contributing
 
 Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
