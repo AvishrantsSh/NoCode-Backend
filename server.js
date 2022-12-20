@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");
 const passport = require("passport");
 const cors = require("cors");
 const swaggerUi = require("swagger-ui-express");
-const swaggerFile = require("./swagger_output.json");
+const swaggerFile = require("./swagger/swagger_output.json");
 
 require("dotenv/config");
 const PORT = process.env.PORT || 5000;
